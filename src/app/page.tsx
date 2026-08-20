@@ -1,9 +1,8 @@
-import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import { Badge } from "@/components/ui/Badge";
 import { Icon } from "@/components/Icon";
 import { SERVICES } from "@/data/services";
+import { HeroShowcase } from "./HeroShowcase";
 import "./home.css";
 
 export default function HomePage() {
@@ -47,42 +46,8 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Compliance-status panel — stands in for brand photography */}
-          <div className="hero-panel">
-            <div className="hero-panel__box">
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <span className="eyebrow eyebrow--light">Compliance status</span>
-                <Badge tone="success" solid dot>
-                  All current
-                </Badge>
-              </div>
-              {(
-                [
-                  ["VAT — March", "Filed", "success"],
-                  ["PAYE — Q1", "Filed", "success"],
-                  ["Annual return", "In review", "warning"],
-                ] as const
-              ).map(([k, v, tone]) => (
-                <div key={k} className="hero-panel__row">
-                  <span className="hero-panel__row-label">
-                    <Icon name="file-text" size={16} />
-                    {k}
-                  </span>
-                  <Badge tone={tone}>{v}</Badge>
-                </div>
-              ))}
-            </div>
-            <Card accent elevation="lg" padding="md" className="hero-panel__card">
-              <div className="hero-panel__card-l">Tax saved this year</div>
-              <div className="hero-panel__card-v">₦ 12,480,000</div>
-            </Card>
-          </div>
+          {/* Animated service showcase (replaces static brand photography) */}
+          <HeroShowcase />
         </div>
       </section>
 
