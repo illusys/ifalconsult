@@ -1,0 +1,346 @@
+/* =====================================================================
+   IFAL Design System — tokens ported verbatim from the design handoff.
+   Fonts are self-hosted via next/font (see layout.tsx); the font-family
+   CSS variables (--font-display / --font-sans / --font-mono) are injected
+   there and referenced below.
+   ===================================================================== */
+
+:root {
+  /* ---- Brand: Navy (primary) ---- */
+  --ifal-navy-50: #ecedf7;
+  --ifal-navy-100: #d4d5ee;
+  --ifal-navy-200: #a9abdd;
+  --ifal-navy-300: #7d80cb;
+  --ifal-navy-400: #5255b3;
+  --ifal-navy-500: #33368f;
+  --ifal-navy-600: #292a80;
+  --ifal-navy-700: #202070; /* BRAND NAVY */
+  --ifal-navy-800: #191957;
+  --ifal-navy-900: #10103b;
+
+  /* ---- Brand: Red (accent) ---- */
+  --ifal-red-50: #fde8ea;
+  --ifal-red-100: #fbccd0;
+  --ifal-red-200: #f5989f;
+  --ifal-red-300: #ef6570;
+  --ifal-red-400: #ea3141;
+  --ifal-red-500: #e00016; /* BRAND RED */
+  --ifal-red-600: #c00013;
+  --ifal-red-700: #99000f;
+  --ifal-red-800: #73000b;
+  --ifal-red-900: #4d0008;
+
+  /* ---- Neutrals (cool, navy-tinted grays) ---- */
+  --ifal-white: #ffffff;
+  --ifal-gray-50: #f6f7fb;
+  --ifal-gray-100: #eef0f6;
+  --ifal-gray-200: #dfe2ec;
+  --ifal-gray-300: #c7cbd9;
+  --ifal-gray-400: #9aa0b4;
+  --ifal-gray-500: #6b7186;
+  --ifal-gray-600: #4d5266;
+  --ifal-gray-700: #383c4d;
+  --ifal-gray-800: #23262f;
+  --ifal-gray-900: #14151b;
+  --ifal-black: #0b0c10;
+
+  /* ---- Semantic hues ---- */
+  --ifal-success-500: #1a7f4b;
+  --ifal-success-50: #e6f4ec;
+  --ifal-warning-500: #b57d00;
+  --ifal-warning-50: #fbf1dc;
+  --ifal-danger-500: #c00013;
+  --ifal-danger-50: #fde8ea;
+  --ifal-info-500: #292a80;
+  --ifal-info-50: #ecedf7;
+
+  /* Surfaces */
+  --surface-page: var(--ifal-gray-50);
+  --surface-card: var(--ifal-white);
+  --surface-raised: var(--ifal-white);
+  --surface-sunken: var(--ifal-gray-100);
+  --surface-inverse: var(--ifal-navy-700);
+  --surface-brand: var(--ifal-navy-700);
+  --surface-brand-soft: var(--ifal-navy-50);
+  --surface-accent: var(--ifal-red-500);
+
+  /* Text */
+  --text-strong: var(--ifal-navy-900);
+  --text-body: var(--ifal-gray-700);
+  --text-muted: var(--ifal-gray-500);
+  --text-subtle: var(--ifal-gray-400);
+  --text-on-brand: var(--ifal-white);
+  --text-on-accent: var(--ifal-white);
+  --text-brand: var(--ifal-navy-700);
+  --text-accent: var(--ifal-red-500);
+  --text-link: var(--ifal-navy-700);
+  --text-link-hover: var(--ifal-red-500);
+
+  /* Borders */
+  --border-subtle: var(--ifal-gray-200);
+  --border-default: var(--ifal-gray-300);
+  --border-strong: var(--ifal-gray-400);
+  --border-brand: var(--ifal-navy-700);
+  --border-focus: var(--ifal-navy-500);
+
+  /* Interactive — primary (navy) */
+  --btn-primary-bg: var(--ifal-navy-700);
+  --btn-primary-bg-hover: var(--ifal-navy-800);
+  --btn-primary-bg-active: var(--ifal-navy-900);
+  --btn-primary-fg: var(--ifal-white);
+
+  /* Interactive — accent (red) */
+  --btn-accent-bg: var(--ifal-red-500);
+  --btn-accent-bg-hover: var(--ifal-red-600);
+  --btn-accent-bg-active: var(--ifal-red-700);
+  --btn-accent-fg: var(--ifal-white);
+
+  /* Focus ring */
+  --focus-ring: 0 0 0 3px rgba(32, 32, 112, 0.3);
+  --focus-ring-accent: 0 0 0 3px rgba(224, 0, 22, 0.28);
+
+  /* Type scale */
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-md: 1.125rem;
+  --fs-lg: 1.375rem;
+  --fs-xl: 1.75rem;
+  --fs-2xl: 2.25rem;
+  --fs-3xl: 3rem;
+  --fs-4xl: 3.75rem;
+  --fs-5xl: 4.75rem;
+
+  /* Weights */
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --fw-heavy: 800;
+
+  /* Line heights */
+  --lh-tight: 1.05;
+  --lh-snug: 1.2;
+  --lh-normal: 1.5;
+  --lh-relaxed: 1.65;
+
+  /* Letter spacing */
+  --ls-tighter: -0.02em;
+  --ls-tight: -0.01em;
+  --ls-normal: 0;
+  --ls-wide: 0.04em;
+  --ls-wider: 0.12em;
+
+  /* Spacing (4px base) */
+  --sp-0: 0;
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-7: 2.5rem;
+  --sp-8: 3rem;
+  --sp-9: 4rem;
+  --sp-10: 6rem;
+
+  /* Radius */
+  --radius-xs: 3px;
+  --radius-sm: 5px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-pill: 999px;
+
+  /* Borders */
+  --bw-hair: 1px;
+  --bw-thin: 1.5px;
+  --bw-thick: 3px;
+
+  /* Shadows — cool, navy-tinted, low-spread */
+  --shadow-xs: 0 1px 2px rgba(16, 16, 59, 0.06);
+  --shadow-sm: 0 1px 3px rgba(16, 16, 59, 0.08), 0 1px 2px rgba(16, 16, 59, 0.06);
+  --shadow-md: 0 4px 12px rgba(16, 16, 59, 0.1), 0 2px 4px rgba(16, 16, 59, 0.06);
+  --shadow-lg: 0 12px 28px rgba(16, 16, 59, 0.14), 0 4px 8px rgba(16, 16, 59, 0.08);
+  --shadow-xl: 0 24px 56px rgba(16, 16, 59, 0.18);
+
+  /* Layout */
+  --container-max: 1200px;
+  --container-narrow: 760px;
+  --header-h: 72px;
+
+  /* Motion */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 320ms;
+
+  /* Font families — the next/font variables are aliased here so token
+     names from the handoff keep working unchanged. */
+  --font-display: var(--font-barlow), "Arial Narrow", system-ui, sans-serif;
+  --font-sans: var(--font-plex-sans), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+
+/* ---- Reset / base ---- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--fs-base);
+  line-height: var(--lh-normal);
+  color: var(--text-body);
+  background: var(--surface-card);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+img,
+picture,
+svg {
+  max-width: 100%;
+  display: block;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  color: var(--ifal-navy-700);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tighter);
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+/* Links — navy default, red on hover (handoff §3.7) */
+a {
+  color: var(--text-link);
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-standard);
+}
+
+a:hover {
+  color: var(--text-link-hover);
+}
+
+/* Numbers / currency / figures use the mono face with tabular numerals. */
+.mono,
+.figure {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Visible focus for keyboard users on any interactive element. */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: var(--radius-sm);
+}
+
+/* Skip link for accessibility */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  background: var(--ifal-navy-700);
+  color: #fff;
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: 0 0 var(--radius-md) 0;
+}
+.skip-link:focus {
+  left: 0;
+  color: #fff;
+}
+
+/* Shared layout helpers */
+.container {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--sp-6);
+  width: 100%;
+}
+
+.section {
+  padding: var(--sp-10) 0;
+}
+
+.eyebrow {
+  font-family: var(--font-display);
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-wider);
+  color: var(--ifal-red-500);
+}
+.eyebrow--light {
+  color: var(--ifal-navy-200);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Responsive typography step-down (handoff §Responsive) */
+@media (max-width: 900px) {
+  :root {
+    --fs-4xl: 2.5rem;
+    --fs-3xl: 2.25rem;
+    --fs-2xl: 1.875rem;
+    --fs-xl: 1.5rem;
+  }
+  .section {
+    padding: var(--sp-8) 0;
+  }
+  .container {
+    padding-inline: var(--sp-5);
+  }
+}
+
+@media (max-width: 560px) {
+  :root {
+    --fs-4xl: 2.125rem;
+    --fs-3xl: 1.875rem;
+  }
+}
