@@ -1,135 +1,122 @@
 /* =====================================================================
-   Animated hero showcase — rotates 5 IFAL services, each animation
-   dramatizing a Nigerian-business pain point and IFAL's value proposition.
+   Animated hero banner — the whole hero rotates through 5 IFAL services.
+   The story leads on the LEFT (service name → value proposition → pain →
+   a service-specific CTA); the animation on the RIGHT changes in sync.
    Pure SVG + CSS. Transform/opacity only (GPU-friendly). Reduced-motion aware.
    ===================================================================== */
 
-.showcase {
+.hero-rot {
   position: relative;
 }
 
-/* Hold all animation work until the showcase is scrolled into view — keeps it
-   off the main thread during the initial page load (mobile especially). */
-.showcase:not(.is-inview) .showcase__stage *,
-.showcase:not(.is-inview) .showcase__kicker,
-.showcase:not(.is-inview) .showcase__copy > *,
-.showcase:not(.is-inview) .showcase__card > *,
-.showcase:not(.is-inview) .showcase__dot-fill {
+.hero-rot__grid {
+  display: grid;
+  grid-template-columns: 1.04fr 0.96fr;
+  gap: var(--sp-9);
+  align-items: center;
+}
+
+/* Hold the heavy SVG scene animation until the hero is ready/in view, so it
+   never competes with LCP or hydration on load. The one-shot copy/card
+   fade-ins are cheap and run immediately. */
+.showcase:not(.is-inview) .showcase__stage * {
   animation-play-state: paused !important;
 }
 
-.showcase__panel {
-  background: var(--ifal-navy-700);
-  border-radius: var(--radius-xl);
-  padding: var(--sp-6);
-  padding-bottom: 88px;
+/* ---------------- Left: the story ---------------- */
+.hero-rot__left {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: var(--sp-4);
-  overflow: hidden;
+}
+.hero-rot__h1 {
+  font-size: var(--fs-4xl);
+  font-weight: var(--fw-heavy);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tighter);
+  color: var(--ifal-navy-700);
+  margin: 0;
 }
 
-.showcase__top {
+/* Rotating region — space reserved so auto-rotation never shifts layout. */
+.hero-rot__story {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: flex-start;
   gap: var(--sp-3);
+  min-height: 316px;
+  width: 100%;
 }
 
 .showcase__kicker {
+  display: inline-flex;
+  align-items: center;
   font-family: var(--font-display);
   font-size: var(--fs-xs);
   font-weight: var(--fw-bold);
   text-transform: uppercase;
   letter-spacing: var(--ls-wider);
-  color: #fff;
-  animation: sc-fade var(--dur-slow) var(--ease-standard) both;
-}
-
-.showcase__pause {
-  appearance: none;
-  border: 1px solid var(--ifal-navy-500);
-  background: var(--ifal-navy-800);
-  color: var(--ifal-navy-100);
-  width: 30px;
-  height: 30px;
+  color: var(--ifal-navy-700);
+  background: var(--ifal-navy-50);
+  padding: 5px 11px;
   border-radius: var(--radius-sm);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: background-color var(--dur-fast) var(--ease-standard),
-    border-color var(--dur-fast) var(--ease-standard);
-  flex-shrink: 0;
-}
-.showcase__pause:hover {
-  background: var(--ifal-navy-900);
-  border-color: var(--ifal-navy-400);
-  color: #fff;
-}
-.showcase__pause:focus-visible {
-  outline: none;
-  box-shadow: var(--focus-ring);
-}
-
-/* The animation stage */
-.showcase__stage {
-  position: relative;
-  height: 210px;
-  border-radius: var(--radius-lg);
-  background: var(--ifal-navy-800);
-  overflow: hidden;
-}
-.showcase__stage svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-/* Copy block */
-.showcase__copy {
-  min-height: 96px;
 }
 .showcase__pain {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: var(--fs-xs);
-  color: var(--ifal-navy-200);
-  margin-bottom: 6px;
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  margin: 0;
 }
 .showcase__pain-dot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--ifal-red-400);
+  background: var(--ifal-red-500);
   flex-shrink: 0;
 }
-.showcase__headline {
+.hero-rot__value {
   font-family: var(--font-display);
-  font-size: var(--fs-lg);
+  font-size: var(--fs-2xl);
   font-weight: var(--fw-bold);
   line-height: var(--lh-snug);
-  color: #fff;
-  margin: 0 0 6px;
-}
-.showcase__line {
-  font-size: var(--fs-sm);
-  line-height: var(--lh-normal);
-  color: var(--ifal-navy-100);
+  letter-spacing: var(--ls-tight);
+  color: var(--ifal-navy-700);
   margin: 0;
 }
+.showcase__line {
+  font-size: var(--fs-md);
+  line-height: var(--lh-normal);
+  color: var(--text-body);
+  margin: 0;
+  max-width: 540px;
+}
+.hero-rot__ctas {
+  display: flex;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+  margin-top: var(--sp-1);
+}
 
-/* Fade-in of copy when scene changes */
+/* Fade each rotating element in on scene change (keyed remount in React). */
 .showcase__copy > * {
   animation: sc-fade var(--dur-slow) var(--ease-standard) both;
 }
 
-/* Progress dots / tabs */
+/* ---------------- Controls (progress + pause) ---------------- */
+.hero-rot__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  width: 100%;
+  max-width: 460px;
+}
 .showcase__dots {
   display: flex;
   gap: 7px;
-  margin-top: 2px;
+  flex: 1;
 }
 .showcase__dot {
   appearance: none;
@@ -138,7 +125,7 @@
   height: 4px;
   flex: 1;
   border-radius: var(--radius-pill);
-  background: var(--ifal-navy-500);
+  background: var(--ifal-gray-200);
   cursor: pointer;
   overflow: hidden;
   position: relative;
@@ -148,7 +135,7 @@
   box-shadow: var(--focus-ring);
 }
 .showcase__dot[aria-selected="true"] {
-  background: var(--ifal-navy-600);
+  background: var(--ifal-gray-300);
 }
 .showcase__dot-fill {
   position: absolute;
@@ -158,10 +145,58 @@
   background: var(--ifal-red-500);
 }
 .showcase__dot[aria-selected="true"] .showcase__dot-fill {
-  animation: sc-progress var(--sc-duration, 6000ms) linear both;
+  animation: sc-progress var(--sc-duration, 6800ms) linear both;
 }
-.showcase.is-paused .showcase__dot[aria-selected="true"] .showcase__dot-fill {
+.showcase.is-paused .showcase__dot[aria-selected="true"] .showcase__dot-fill,
+.showcase:not(.is-inview) .showcase__dot[aria-selected="true"] .showcase__dot-fill {
   animation-play-state: paused;
+}
+.showcase__pause {
+  appearance: none;
+  border: 1px solid var(--border-default);
+  background: #fff;
+  color: var(--ifal-navy-700);
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color var(--dur-fast) var(--ease-standard),
+    border-color var(--dur-fast) var(--ease-standard);
+}
+.showcase__pause:hover {
+  background: var(--ifal-navy-50);
+  border-color: var(--border-strong);
+}
+.showcase__pause:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.hero-rot__left .hero__stats {
+  margin-top: var(--sp-2);
+}
+
+/* ---------------- Right: the animation ---------------- */
+.hero-rot__right {
+  position: relative;
+}
+.showcase__stage {
+  position: relative;
+  height: 360px;
+  border-radius: var(--radius-xl);
+  background: var(--ifal-navy-700);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+.showcase__stage svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: var(--sp-4);
 }
 
 /* Overhanging value card (mirrors the design's hero card motif) */
@@ -169,13 +204,16 @@
   position: absolute;
   bottom: -22px;
   right: -18px;
-  width: 210px;
+  width: 218px;
   background: #fff;
   border: 1px solid var(--border-subtle);
   border-top: 3px solid var(--ifal-red-500);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
   padding: var(--sp-4);
+}
+.showcase__card:hover {
+  color: inherit;
 }
 .showcase__card-label {
   font-size: var(--fs-xs);
@@ -203,24 +241,40 @@
   animation: sc-fade var(--dur-slow) var(--ease-standard) both;
 }
 
-@media (max-width: 680px) {
-  .showcase__card {
-    right: 0;
+/* ---------------- Responsive ---------------- */
+@media (max-width: 900px) {
+  .hero-rot__grid {
+    grid-template-columns: 1fr;
+    gap: var(--sp-8);
+  }
+  .hero-rot__story {
+    min-height: 300px;
+  }
+  .showcase__stage {
+    height: 320px;
+  }
+  .hero-rot__controls {
+    max-width: none;
   }
 }
-
-/* ---------------- Shared scene primitives ---------------- */
-.sc-muted { fill: var(--ifal-navy-300); }
-.sc-line { stroke: var(--ifal-navy-400); }
-.sc-panel { fill: var(--ifal-navy-700); }
-.sc-panel-2 { fill: #26267e; }
-.sc-white { fill: #fff; }
-.sc-red { fill: var(--ifal-red-500); }
-.sc-red-stroke { stroke: var(--ifal-red-500); }
-.sc-green { fill: var(--ifal-success-500); }
-.sc-green-stroke { stroke: var(--ifal-success-500); }
-.sc-navy-100 { fill: var(--ifal-navy-100); }
-.sc-navy-200 { fill: var(--ifal-navy-200); }
+@media (max-width: 560px) {
+  .hero-rot__story {
+    min-height: 340px;
+  }
+  .showcase__stage {
+    height: 260px;
+  }
+  .showcase__card {
+    right: 0;
+    width: 200px;
+  }
+  .hero-rot__ctas {
+    width: 100%;
+  }
+  .hero-rot__ctas .btn {
+    flex: 1;
+  }
+}
 
 /* ---------------- Keyframes ---------------- */
 @keyframes sc-fade {

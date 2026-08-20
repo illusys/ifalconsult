@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { Button } from "@/components/ui/Button";
+import { Icon } from "@/components/Icon";
 import "./hero-showcase.css";
 
 type Service = {
@@ -10,15 +12,17 @@ type Service = {
   pain: string;
   headline: string;
   line: string;
+  cta: string;
   cardLabel: string;
   cardValue: string;
   cardNote: string;
 };
 
 // Copy grounded in current pain points for Nigerian businesses
-// (weak records → no credit; $236bn MSME funding gap, ~20% loan access;
+// (weak records → no credit; ~$236bn MSME funding gap, ~20% loan access;
 // 2025 Nigeria Tax Act / NRS e-invoicing; weak internal controls; low
-// financial literacy). Value proposition leads; the service follows.
+// financial literacy). The value proposition leads; the service follows;
+// each call to action is specific to the service on screen.
 const SERVICES: Service[] = [
   {
     id: "software",
@@ -26,6 +30,7 @@ const SERVICES: Service[] = [
     pain: "Books scattered across spreadsheets, paper, and apps that don't talk.",
     headline: "One system. One source of truth.",
     line: "We select, set up, and tailor your accounting software — e-invoicing ready — so every figure is current and every report is a click away.",
+    cta: "Set up my accounting system",
     cardLabel: "Set-up outcome",
     cardValue: "Real-time books",
     cardNote: "NRS e-invoicing ready for 2026.",
@@ -36,6 +41,7 @@ const SERVICES: Service[] = [
     pain: "Growth, funding, and restructuring calls made on gut feel.",
     headline: "Decisions backed by numbers.",
     line: "Financial models, budgets, and forecasts that hold up under scrutiny — and that banks and investors actually trust.",
+    cta: "Make my numbers investor-ready",
     cardLabel: "MSME funding gap",
     cardValue: "$236bn",
     cardNote: "Bankable numbers open the door.",
@@ -46,6 +52,7 @@ const SERVICES: Service[] = [
     pain: "The business stalls whenever the owner isn't in the room.",
     headline: "A team that runs the numbers.",
     line: "Practical, hands-on finance and systems training, built around the tools and reports your team uses every day.",
+    cta: "Upskill my team",
     cardLabel: "Capability",
     cardValue: "Your team",
     cardNote: "Confident with the numbers, not just us.",
@@ -56,6 +63,7 @@ const SERVICES: Service[] = [
     pain: "Weak controls, and money leaking out unnoticed until it's too late.",
     headline: "Findings you can act on.",
     line: "Statutory and internal audits that surface what's leaking, strengthen your controls, and produce accounts banks and tenders accept.",
+    cta: "Book an audit",
     cardLabel: "SME loan access",
     cardValue: "20.2%",
     cardNote: "Audited accounts help you qualify.",
@@ -66,19 +74,21 @@ const SERVICES: Service[] = [
     pain: "Shifting rules and missed deadlines that turn into penalties.",
     headline: "Every filing on time. Zero penalties.",
     line: "Registration, filings, and planning across VAT, PAYE, and company income tax — and the reliefs you're entitled to under the 2025 reforms.",
+    cta: "Fix my tax compliance",
     cardLabel: "Penalties",
     cardValue: "₦0",
     cardNote: "Filed on time; only what you owe.",
   },
 ];
 
-const DURATION = 6200;
+const DURATION = 6800;
 
 export function HeroShowcase() {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [reduced, setReduced] = useState(false);
   const [inView, setInView] = useState(false);
+  const [ready, setReady] = useState(false);
   const hovering = useRef(false);
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -90,42 +100,57 @@ export function HeroShowcase() {
     return () => mq.removeEventListener("change", set);
   }, []);
 
-  // Only run the rotation and animations while the showcase is on screen,
-  // so it never competes for the main thread during the initial load.
+  // Hold the SVG animation and rotation until just after first paint so they
+  // never compete with the hero's LCP/hydration on load (mobile especially).
+  useEffect(() => {
+    const w = window as Window & {
+      requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
+    };
+    let t: ReturnType<typeof setTimeout>;
+    const start = () => {
+      t = setTimeout(() => setReady(true), 400);
+    };
+    if (w.requestIdleCallback) {
+      w.requestIdleCallback(start, { timeout: 1200 });
+    } else {
+      start();
+    }
+    return () => clearTimeout(t);
+  }, []);
+
+  // Only rotate while the hero is on screen (it starts on screen, but this
+  // pauses rotation once scrolled past, saving work).
   useEffect(() => {
     const el = rootRef.current;
     if (!el) return;
     const io = new IntersectionObserver(
       ([entry]) => setInView(entry.isIntersecting),
-      { threshold: 0.25 },
+      { threshold: 0.2 },
     );
     io.observe(el);
     return () => io.disconnect();
   }, []);
 
   useEffect(() => {
-    if (paused || reduced || !inView) return;
+    if (paused || reduced || !inView || !ready) return;
     const t = setTimeout(() => setIndex((i) => (i + 1) % SERVICES.length), DURATION);
     return () => clearTimeout(t);
-  }, [index, paused, reduced, inView]);
+  }, [index, paused, reduced, inView, ready]);
 
   const active = SERVICES[index];
-
-  function onEnter() {
-    hovering.current = true;
-    setPaused(true);
-  }
-  function onLeave() {
-    hovering.current = false;
-    setPaused(false);
-  }
 
   return (
     <div
       ref={rootRef}
-      className={`showcase${paused ? " is-paused" : ""}${inView ? " is-inview" : ""}`}
-      onMouseEnter={onEnter}
-      onMouseLeave={onLeave}
+      className={`showcase hero-rot${paused ? " is-paused" : ""}${inView && ready ? " is-inview" : ""}`}
+      onMouseEnter={() => {
+        hovering.current = true;
+        setPaused(true);
+      }}
+      onMouseLeave={() => {
+        hovering.current = false;
+        setPaused(false);
+      }}
       onFocusCapture={() => setPaused(true)}
       onBlurCapture={(e) => {
         if (!e.currentTarget.contains(e.relatedTarget as Node) && !hovering.current) {
@@ -133,86 +158,119 @@ export function HeroShowcase() {
         }
       }}
     >
-      <div className="showcase__panel">
-        <div className="showcase__top">
-          <span className="showcase__kicker" key={active.id}>
-            {active.name}
-          </span>
-          <button
-            type="button"
-            className="showcase__pause"
-            aria-label={paused ? "Play service spotlight" : "Pause service spotlight"}
-            aria-pressed={paused}
-            onClick={() => setPaused((p) => !p)}
-          >
-            {paused ? (
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-            ) : (
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                <rect x="6" y="5" width="4" height="14" rx="1" />
-                <rect x="14" y="5" width="4" height="14" rx="1" />
-              </svg>
-            )}
-          </button>
-        </div>
+      <div className="container hero-rot__grid">
+        {/* LEFT — the story leads here, left-to-right */}
+        <div className="hero-rot__left">
+          <span className="eyebrow">Interactive Financial Advisors Limited</span>
+          <h1 className="hero-rot__h1">Financial clarity for growing businesses.</h1>
 
-        {/* Animation stage — decorative; meaning is conveyed by the copy. */}
-        <div className="showcase__stage" aria-hidden="true">
-          <Scene key={active.id} id={active.id} />
-        </div>
+          {/* Rotating value proposition — announced to assistive tech. */}
+          <div className="showcase__copy hero-rot__story" aria-live="polite">
+            <span className="showcase__kicker" key={`k-${active.id}`}>
+              {active.name}
+            </span>
+            <p className="showcase__pain" key={`p-${active.id}`}>
+              <span className="showcase__pain-dot" aria-hidden="true" />
+              {active.pain}
+            </p>
+            <h2 className="hero-rot__value" key={`h-${active.id}`}>
+              {active.headline}
+            </h2>
+            <p className="showcase__line" key={`l-${active.id}`}>
+              {active.line}
+            </p>
+            <div className="hero-rot__ctas" key={`c-${active.id}`}>
+              <Button
+                variant="accent"
+                size="lg"
+                href="/contact"
+                iconRight={<Icon name="arrow-right" size={18} />}
+              >
+                {active.cta}
+              </Button>
+              <Button variant="secondary" size="lg" href={`/services#${active.id}`}>
+                See how it works
+              </Button>
+            </div>
+          </div>
 
-        {/* Copy — announced to assistive tech when it changes. */}
-        <div className="showcase__copy" aria-live="polite">
-          <p className="showcase__pain" key={`p-${active.id}`}>
-            <span className="showcase__pain-dot" />
-            {active.pain}
-          </p>
-          <h3 className="showcase__headline" key={`h-${active.id}`}>
-            {active.headline}
-          </h3>
-          <p className="showcase__line" key={`l-${active.id}`}>
-            {active.line}
-          </p>
-        </div>
-
-        <div className="showcase__dots" role="tablist" aria-label="IFAL services">
-          {SERVICES.map((s, i) => (
+          {/* Progress tabs across the five services */}
+          <div className="hero-rot__controls">
+            <div className="showcase__dots" role="tablist" aria-label="IFAL services">
+              {SERVICES.map((s, i) => (
+                <button
+                  key={s.id}
+                  type="button"
+                  role="tab"
+                  className="showcase__dot"
+                  aria-selected={i === index}
+                  aria-label={`${s.name}${i === index ? ", showing" : ""}`}
+                  onClick={() => setIndex(i)}
+                >
+                  <span
+                    className="showcase__dot-fill"
+                    style={{ "--sc-duration": `${DURATION}ms` } as React.CSSProperties}
+                  />
+                </button>
+              ))}
+            </div>
             <button
-              key={s.id}
               type="button"
-              role="tab"
-              className="showcase__dot"
-              aria-selected={i === index}
-              aria-label={`${s.name}${i === index ? ", current" : ""}`}
-              onClick={() => setIndex(i)}
+              className="showcase__pause"
+              aria-label={paused ? "Play the service showcase" : "Pause the service showcase"}
+              aria-pressed={paused}
+              onClick={() => setPaused((p) => !p)}
             >
-              <span
-                className="showcase__dot-fill"
-                style={{ "--sc-duration": `${DURATION}ms` } as React.CSSProperties}
-              />
+              {paused ? (
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              ) : (
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <rect x="6" y="5" width="4" height="14" rx="1" />
+                  <rect x="14" y="5" width="4" height="14" rx="1" />
+                </svg>
+              )}
             </button>
-          ))}
+          </div>
+
+          {/* Persistent credibility */}
+          <div className="hero__stats">
+            {[
+              ["18+", "Years advising"],
+              ["340", "Businesses served"],
+              ["100%", "Filings on time"],
+            ].map(([v, l]) => (
+              <div key={l}>
+                <div className="hero__stat-v">{v}</div>
+                <div className="hero__stat-l">{l}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* RIGHT — the animation, changing in sync with the story */}
+        <div className="hero-rot__right">
+          <div className="showcase__stage" aria-hidden="true">
+            <Scene key={active.id} id={active.id} />
+          </div>
+          <Link
+            href={`/services#${active.id}`}
+            className="showcase__card"
+            aria-label={`${active.name}: ${active.headline}. See ${active.name} services.`}
+          >
+            <div className="showcase__card-label" key={`cl-${active.id}`}>
+              {active.cardLabel}
+            </div>
+            <div className="showcase__card-value" key={`cv-${active.id}`}>
+              {active.cardValue}
+            </div>
+            <div className="showcase__card-note" key={`cn-${active.id}`}>
+              {active.cardNote}
+            </div>
+          </Link>
         </div>
       </div>
-
-      {/* Overhanging value card (mirrors the design's hero card motif) */}
-      <Link
-        href={`/services#${active.id}`}
-        className="showcase__card"
-        aria-label={`${active.name}: ${active.headline}. See ${active.name} services.`}
-      >
-        <div className="showcase__card-label" key={`cl-${active.id}`}>
-          {active.cardLabel}
-        </div>
-        <div className="showcase__card-value" key={`cv-${active.id}`}>
-          {active.cardValue}
-        </div>
-        <div className="showcase__card-note" key={`cn-${active.id}`}>
-          {active.cardNote}
-        </div>
-      </Link>
     </div>
   );
 }
@@ -254,7 +312,6 @@ const svgStyle = { fontFamily: SANS as string };
 function SoftwareScene() {
   return (
     <svg viewBox={VB} preserveAspectRatio="xMidYMid meet" role="img" style={svgStyle}>
-      {/* scattered receipts flying in */}
       <g className="sc1-a">
         <rect x="34" y="70" width="42" height="54" rx="4" fill={NAVY_200} opacity="0.5" />
       </g>
@@ -265,18 +322,15 @@ function SoftwareScene() {
         <rect x="46" y="60" width="42" height="54" rx="4" fill={NAVY_200} opacity="0.6" />
       </g>
 
-      {/* the system card */}
       <rect x="150" y="44" width="150" height="122" rx="10" fill="#26267e" />
       <rect x="150" y="44" width="150" height="26" rx="10" fill="#2f2f92" />
       <circle cx="166" cy="57" r="4" fill={RED_500} />
       <rect x="178" y="54" width="60" height="6" rx="3" fill={NAVY_100} opacity="0.7" />
 
-      {/* ledger rows drawing in */}
       <rect className="sc1-row sc1-row-1" x="166" y="84" width="118" height="9" rx="3" fill="#3a3aa0" />
       <rect className="sc1-row sc1-row-2" x="166" y="102" width="118" height="9" rx="3" fill="#3a3aa0" />
       <rect className="sc1-row sc1-row-3" x="166" y="120" width="118" height="9" rx="3" fill="#3a3aa0" />
 
-      {/* synced tick */}
       <g className="sc1-tick">
         <circle cx="284" cy="150" r="15" fill={GREEN} />
         <path d="M277 150 l5 5 l9 -10" fill="none" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
@@ -292,11 +346,9 @@ function SoftwareScene() {
 function AdvisoryScene() {
   return (
     <svg viewBox={VB} preserveAspectRatio="xMidYMid meet" role="img" style={svgStyle}>
-      {/* axes */}
       <line x1="40" y1="30" x2="40" y2="170" stroke="#5255b3" strokeWidth="1.5" opacity="0.6" />
       <line x1="40" y1="170" x2="308" y2="170" stroke="#5255b3" strokeWidth="1.5" opacity="0.6" />
 
-      {/* small bars */}
       <g fill="#3a3aa0">
         <rect className="sc2-bar sc2-bar-1" x="60" y="128" width="16" height="42" rx="2" />
         <rect className="sc2-bar sc2-bar-2" x="92" y="112" width="16" height="58" rx="2" />
@@ -304,10 +356,8 @@ function AdvisoryScene() {
         <rect className="sc2-bar sc2-bar-4" x="156" y="96" width="16" height="74" rx="2" />
       </g>
 
-      {/* projection cone */}
       <polygon className="sc2-cone" points="180,92 300,44 300,96 180,92" fill={RED_400} />
 
-      {/* historical (flatter) line */}
       <polyline
         className="sc2-hist"
         points="52,140 84,124 116,130 172,104"
@@ -317,7 +367,6 @@ function AdvisoryScene() {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      {/* forecast (rising) line */}
       <polyline
         className="sc2-fore"
         points="172,104 216,86 260,64 300,46"
@@ -329,7 +378,6 @@ function AdvisoryScene() {
       />
       <circle cx="300" cy="46" r="4.5" fill={RED_500} />
 
-      {/* investor-ready stamp */}
       <g className="sc2-stamp">
         <rect x="192" y="120" width="122" height="30" rx="15" fill="#fff" />
         <circle cx="210" cy="135" r="8" fill={GREEN} />
@@ -358,7 +406,6 @@ function TrainingScene() {
             <circle cx={p.x + 24} cy="61" r="6" fill="#fff" opacity="0.9" />
             <path d={`M${p.x + 12} 78 a12 10 0 0 1 24 0 z`} fill="#fff" opacity="0.9" />
           </g>
-          {/* skill meter track + fill */}
           <rect x={p.x} y="100" width="48" height="8" rx="4" fill="#2f2f92" />
           <rect
             className={`sc3-fill ${p.fill}`}
@@ -373,7 +420,6 @@ function TrainingScene() {
         </g>
       ))}
 
-      {/* report card with drawn check */}
       <rect x="256" y="52" width="60" height="76" rx="8" fill="#26267e" />
       <rect x="268" y="66" width="36" height="6" rx="3" fill="#3a3aa0" />
       <rect x="268" y="80" width="36" height="6" rx="3" fill="#3a3aa0" />
@@ -407,23 +453,19 @@ function AuditScene() {
         </g>
       ))}
 
-      {/* scan line */}
       <rect className="sc4-scan" x="34" y="40" width="210" height="14" rx="4" fill={NAVY_100} opacity="0.18" />
 
-      {/* flagged anomaly on row 3 */}
       <g className="sc4-flag">
         <rect x="46" y="102" width="186" height="16" rx="5" fill="none" stroke={RED_500} strokeWidth="2" />
         <circle cx="238" cy="110" r="8" fill={RED_500} />
         <rect x="237.2" y="105" width="1.6" height="6" rx="0.8" fill="#fff" />
         <circle cx="238" cy="114" r="1" fill="#fff" />
       </g>
-      {/* resolved to green */}
       <g className="sc4-resolve">
         <circle cx="238" cy="110" r="8" fill={GREEN} />
         <path d="M234 110 l3 3 l6 -6" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       </g>
 
-      {/* audited seal */}
       <g className="sc4-seal" style={{ transformOrigin: "286px 150px" }}>
         <circle cx="286" cy="150" r="26" fill="#fff" />
         <path
@@ -468,7 +510,6 @@ function TaxScene() {
         </g>
       ))}
 
-      {/* deadline ring */}
       <g transform="translate(284,101)">
         <circle r="30" fill="none" stroke="#2f2f92" strokeWidth="7" />
         <circle
@@ -484,7 +525,6 @@ function TaxScene() {
           ₦0
         </text>
       </g>
-      {/* on-time label */}
       <g className="sc5-seal" style={{ transformOrigin: "284px 101px" }}>
         <text x="284" y="150" textAnchor="middle" fontSize="10" fontWeight="600" fill={NAVY_100}>
           no penalties

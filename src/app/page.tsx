@@ -8,47 +8,11 @@ import "./home.css";
 export default function HomePage() {
   return (
     <>
-      {/* Hero */}
+      {/* Hero — a single rotating banner: the story leads on the left, the
+          animation changes in sync on the right, each CTA specific to the
+          service on screen. */}
       <section className="hero">
-        <div className="container hero__grid">
-          <div>
-            <span className="eyebrow">Interactive Financial Advisors Limited</span>
-            <h1>Financial clarity for growing businesses.</h1>
-            <p className="hero__lead">
-              IFAL handles your accounting, audit, and tax so you can focus on
-              running the business. We work with owners who want their numbers
-              right and their obligations met on time.
-            </p>
-            <div className="hero__ctas">
-              <Button
-                variant="accent"
-                size="lg"
-                href="/contact"
-                iconRight={<Icon name="arrow-right" size={18} />}
-              >
-                Book a consultation
-              </Button>
-              <Button variant="secondary" size="lg" href="/services">
-                Explore services
-              </Button>
-            </div>
-            <div className="hero__stats">
-              {[
-                ["18+", "Years advising"],
-                ["340", "Businesses served"],
-                ["100%", "Filings on time"],
-              ].map(([v, l]) => (
-                <div key={l}>
-                  <div className="hero__stat-v">{v}</div>
-                  <div className="hero__stat-l">{l}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Animated service showcase (replaces static brand photography) */}
-          <HeroShowcase />
-        </div>
+        <HeroShowcase />
       </section>
 
       {/* Services grid */}
