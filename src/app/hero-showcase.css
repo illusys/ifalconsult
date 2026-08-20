@@ -11,6 +11,7 @@
 /* Hold all animation work until the showcase is scrolled into view — keeps it
    off the main thread during the initial page load (mobile especially). */
 .showcase:not(.is-inview) .showcase__stage *,
+.showcase:not(.is-inview) .showcase__kicker,
 .showcase:not(.is-inview) .showcase__copy > *,
 .showcase:not(.is-inview) .showcase__card > *,
 .showcase:not(.is-inview) .showcase__dot-fill {
@@ -41,7 +42,8 @@
   font-weight: var(--fw-bold);
   text-transform: uppercase;
   letter-spacing: var(--ls-wider);
-  color: var(--ifal-navy-200);
+  color: #fff;
+  animation: sc-fade var(--dur-slow) var(--ease-standard) both;
 }
 
 .showcase__pause {
@@ -369,6 +371,7 @@
 
 /* Respect reduced motion: show resolved end-state, no motion */
 @media (prefers-reduced-motion: reduce) {
+  .showcase__kicker,
   .showcase__copy > *,
   .showcase__card > *,
   .showcase__dot-fill,

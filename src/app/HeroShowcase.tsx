@@ -135,7 +135,9 @@ export function HeroShowcase() {
     >
       <div className="showcase__panel">
         <div className="showcase__top">
-          <span className="showcase__kicker">Service spotlight</span>
+          <span className="showcase__kicker" key={active.id}>
+            {active.name}
+          </span>
           <button
             type="button"
             className="showcase__pause"
