@@ -8,7 +8,7 @@ import "./services.css";
 export const metadata: Metadata = {
   title: "Services — Accounting, Audit, Tax & Advisory",
   description:
-    "Seven practices, one team: accounting, audit, tax management, accounting software implementation, training, data analysis, and business advisory for growing Nigerian businesses.",
+    "One team, seven capabilities: accounting, audit, tax management, accounting software implementation, training, data analysis, and business advisory for growing Nigerian businesses.",
   alternates: { canonical: "/services" },
 };
 
@@ -61,7 +61,7 @@ export default function ServicesPage() {
               marginTop: "var(--sp-4)",
             }}
           >
-            Deadlines are indicative and subject to current FIRS, State IRS, and
+            Deadlines are indicative and subject to current NRS, State IRS, and
             CAC rules. We confirm the exact calendar for your entity during
             onboarding.
           </p>

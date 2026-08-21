@@ -79,12 +79,13 @@ export default function AboutPage() {
               PAYE, and company income tax, implementing the accounting systems
               you run on, training your team, turning your data into reporting
               you can act on, and advising you when the big decisions come. One
-              team, seven practices, working together so nothing falls between
-              the gaps.
+              team, seven capabilities, working together so nothing falls
+              between the gaps.
             </p>
             <p>
-              We keep you compliant with FIRS, the State Internal Revenue
-              Services, and CAC, and we translate what that compliance means for
+              We keep you compliant with the Nigeria Revenue Service (NRS), the
+              State Internal Revenue Services, and CAC, and we translate what
+              that compliance means for
               your business — not as a box-ticking exercise, but as the
               foundation for decisions you can trust.
             </p>
@@ -113,7 +114,7 @@ export default function AboutPage() {
       <section className="section">
         <div className="container">
           <span className="eyebrow">What we do</span>
-          <h2 className="section-h">Seven practices, one team</h2>
+          <h2 className="section-h">One team, seven capabilities</h2>
           <div className="about-svc-grid">
             {SERVICES.map((s) => (
               <div key={s.id} className="about-svc">

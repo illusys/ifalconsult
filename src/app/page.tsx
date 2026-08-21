@@ -19,7 +19,7 @@ export default function HomePage() {
       <section className="section section--sunken">
         <div className="container">
           <span className="eyebrow">What we do</span>
-          <h2 className="section-h">Seven practices, one team</h2>
+          <h2 className="section-h">One team, seven capabilities</h2>
           <div className="services-grid">
             {SERVICES.map((s) => (
               <Card key={s.id} interactive padding="lg" href={`/services#${s.id}`}>

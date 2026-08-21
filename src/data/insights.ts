@@ -36,18 +36,18 @@ export const INSIGHTS: Insight[] = [
     category: "Tax",
     title: "A plain-language guide to VAT filing in Nigeria",
     excerpt:
-      "Who has to register, how the 7.5% rate works, what input VAT you can reclaim, and the monthly FIRS deadline you cannot afford to miss.",
+      "Who has to register, how the 7.5% rate works, what input VAT you can reclaim, and the monthly NRS deadline you cannot afford to miss.",
     date: "2026-08-04",
     readMinutes: 7,
     featured: true,
     author: "IFAL Consult",
     body: [
-      { type: "p", text: "Value Added Tax (VAT) is a consumption tax charged on most goods and services in Nigeria. If your business sells taxable supplies, you collect VAT on behalf of the Federal Inland Revenue Service (FIRS) and remit it every month. Getting this rhythm right is one of the simplest ways to stay out of trouble — and one of the most common places small businesses slip." },
+      { type: "p", text: "Value Added Tax (VAT) is a consumption tax charged on most goods and services in Nigeria. If your business sells taxable supplies, you collect VAT on behalf of the Nigeria Revenue Service (NRS) and remit it every month. Getting this rhythm right is one of the simplest ways to stay out of trouble — and one of the most common places small businesses slip." },
       { type: "h2", text: "Who has to register for VAT" },
-      { type: "p", text: "Registration is an obligation, not a choice. A business is expected to register for VAT with the FIRS on incorporation or when it begins trading, obtain a Taxpayer Identification Number (TIN), and start charging VAT on its taxable supplies. Certain items — such as basic food, medical and pharmaceutical products, and educational materials — are exempt or zero-rated, so the first step is understanding whether what you sell is taxable at all." },
+      { type: "p", text: "Registration is an obligation, not a choice. A business is expected to register for VAT with the NRS on incorporation or when it begins trading, obtain a Taxpayer Identification Number (TIN), and start charging VAT on its taxable supplies. Certain items — such as basic food, medical and pharmaceutical products, and educational materials — are exempt or zero-rated, so the first step is understanding whether what you sell is taxable at all." },
       { type: "h2", text: "How the rate works" },
-      { type: "p", text: "The standard VAT rate is 7.5%. You add it to the price of your taxable supplies (this is your output VAT) and you pay it on the taxable goods and services you buy for the business (this is your input VAT). What you remit to the FIRS each month is the difference between the two." },
-      { type: "callout", text: "Output VAT you charged, minus input VAT you paid on business purchases, equals the amount you remit to FIRS." },
+      { type: "p", text: "The standard VAT rate is 7.5%. You add it to the price of your taxable supplies (this is your output VAT) and you pay it on the taxable goods and services you buy for the business (this is your input VAT). What you remit to the NRS each month is the difference between the two." },
+      { type: "callout", text: "Output VAT you charged, minus input VAT you paid on business purchases, equals the amount you remit to NRS." },
       { type: "h2", text: "The deadline that matters" },
       { type: "p", text: "VAT returns are filed monthly. The return and payment for a given month are due on or before the 21st day of the following month. Late filing and late payment both attract penalties and interest, and they accumulate — so a missed month is not something that quietly goes away." },
       { type: "ul", items: [
@@ -122,7 +122,7 @@ export const INSIGHTS: Insight[] = [
     readMinutes: 8,
     author: "IFAL Consult",
     body: [
-      { type: "p", text: "Company Income Tax (CIT) is the tax on your company's profits, administered by the FIRS. Unlike VAT and PAYE, which you collect on behalf of others, CIT is your company's own liability — which makes planning for it worthwhile." },
+      { type: "p", text: "Company Income Tax (CIT) is the tax on your company's profits, administered by the NRS. Unlike VAT and PAYE, which you collect on behalf of others, CIT is your company's own liability — which makes planning for it worthwhile." },
       { type: "h2", text: "How the rate is set" },
       { type: "p", text: "CIT is charged on taxable profit, and the rate that applies depends on your company's turnover band. Smaller companies fall into lower bands, which is one reason accurate turnover records matter beyond just bookkeeping. Your taxable profit is not the same as your accounting profit — it is your profit adjusted for tax purposes." },
       { type: "h2", text: "Allowable and disallowable expenses" },
@@ -136,7 +136,7 @@ export const INSIGHTS: Insight[] = [
         "Plan before year-end, not after — most tax planning options close once the year does.",
         "File within six months of your year-end to stay penalty-free.",
       ] },
-      { type: "p", text: "We handle CIT computation, filing, and planning for clients, and we represent you with the FIRS if a query or audit arises — so your tax position is both correct and defensible." },
+      { type: "p", text: "We handle CIT computation, filing, and planning for clients, and we represent you with the NRS if a query or audit arises — so your tax position is both correct and defensible." },
     ],
   },
   {

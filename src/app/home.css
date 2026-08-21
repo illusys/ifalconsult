@@ -42,6 +42,15 @@
   font-weight: var(--fw-semibold);
   color: var(--ifal-navy-700);
 }
+/* Non-numeric stat value (e.g. "Cross-industry") — use the display face. */
+.hero__stat-v--text {
+  font-family: var(--font-display);
+  font-variant-numeric: normal;
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-tight);
+  line-height: var(--lh-snug);
+}
 .hero__stat-l {
   font-size: var(--fs-sm);
   color: var(--text-muted);

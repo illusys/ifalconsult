@@ -162,7 +162,7 @@ export function HeroShowcase() {
         {/* LEFT — the story leads here, left-to-right */}
         <div className="hero-rot__left">
           <span className="eyebrow">Interactive Financial Advisors Limited</span>
-          <h1 className="hero-rot__h1">Financial clarity for growing businesses.</h1>
+          <h1 className="hero-rot__h1">Critical thinking, innovative solutions.</h1>
 
           {/* Rotating value proposition — announced to assistive tech. */}
           <div className="showcase__copy hero-rot__story" aria-live="polite">
@@ -237,13 +237,15 @@ export function HeroShowcase() {
           {/* Persistent credibility */}
           <div className="hero__stats">
             {[
-              ["18+", "Years advising"],
-              ["340", "Businesses served"],
-              ["100%", "Filings on time"],
-            ].map(([v, l]) => (
-              <div key={l}>
-                <div className="hero__stat-v">{v}</div>
-                <div className="hero__stat-l">{l}</div>
+              { v: "8+", l: "Years advising" },
+              { v: "Cross-industry", l: "Professional solutions", text: true },
+              { v: "100%", l: "Filings on time" },
+            ].map((s) => (
+              <div key={s.l}>
+                <div className={`hero__stat-v${s.text ? " hero__stat-v--text" : ""}`}>
+                  {s.v}
+                </div>
+                <div className="hero__stat-l">{s.l}</div>
               </div>
             ))}
           </div>

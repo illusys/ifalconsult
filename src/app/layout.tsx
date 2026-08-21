@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   keywords: [
     "accounting Lagos",
     "audit Nigeria",
-    "tax management FIRS",
+    "tax management NRS",
     "business advisory",
     "IFAL Consult",
     "Interactive Financial Advisors Limited",
