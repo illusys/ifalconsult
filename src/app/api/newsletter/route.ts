@@ -18,8 +18,8 @@ export async function POST(request: Request) {
   }
 
   // If a Resend audience is configured, add the contact; otherwise record it.
-  const key = process.env.RESEND_API_KEY;
-  const audienceId = process.env.RESEND_AUDIENCE_ID;
+  const key = process.env.RESEND_API_KEY?.trim();
+  const audienceId = process.env.RESEND_AUDIENCE_ID?.trim();
   try {
     if (key && audienceId) {
       const res = await fetch(`https://api.resend.com/audiences/${audienceId}/contacts`, {

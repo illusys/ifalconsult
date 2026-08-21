@@ -13,6 +13,10 @@ function escapeHtml(s: string) {
     .replace(/"/g, "&quot;");
 }
 
+// Trim env values: a trailing space or newline pasted into the dashboard is a
+// very common cause of auth/validation failures.
+const RESEND_KEY = process.env.RESEND_API_KEY?.trim();
+
 async function sendViaResend(payload: {
   to: string;
   from: string;
@@ -20,12 +24,11 @@ async function sendViaResend(payload: {
   subject: string;
   html: string;
 }) {
-  const key = process.env.RESEND_API_KEY;
-  if (!key) return { sent: false as const };
+  if (!RESEND_KEY) return { sent: false as const };
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${key}`,
+      Authorization: `Bearer ${RESEND_KEY}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
@@ -38,9 +41,36 @@ async function sendViaResend(payload: {
   });
   if (!res.ok) {
     const text = await res.text().catch(() => "");
-    throw new Error(`Email provider error: ${res.status} ${text}`);
+    throw new Error(`Resend ${res.status}: ${text}`);
   }
   return { sent: true as const };
+}
+
+function domainOf(addr: string) {
+  const m = addr.match(/@([^>\s]+)/);
+  return m ? m[1].toLowerCase() : "";
+}
+
+// Safe self-diagnostic. Open /api/contact in a browser to confirm the live
+// deployment actually has the env vars and that `from` is on your verified
+// domain. Never returns the API key itself.
+export async function GET() {
+  const to = (process.env.CONTACT_TO_EMAIL || SITE.email).trim();
+  const from = (process.env.CONTACT_FROM_EMAIL || `IFAL Consult <noreply@${SITE.domain}>`).trim();
+  const fromDomain = domainOf(from);
+  return NextResponse.json({
+    ok: true,
+    resendKeyPresent: Boolean(RESEND_KEY),
+    resendKeyLooksValid: Boolean(RESEND_KEY && RESEND_KEY.startsWith("re_")),
+    from,
+    fromDomain,
+    to,
+    verifiedDomainExpected: SITE.domain,
+    fromDomainMatchesSite: fromDomain === SITE.domain,
+    note:
+      "If resendKeyPresent is false, the env var isn't in this deployment — set it and redeploy. " +
+      "If fromDomainMatchesSite is false, set CONTACT_FROM_EMAIL to an address on your verified Resend domain.",
+  });
 }
 
 export async function POST(request: Request) {
@@ -78,8 +108,8 @@ export async function POST(request: Request) {
     );
   }
 
-  const to = process.env.CONTACT_TO_EMAIL || SITE.email;
-  const from = process.env.CONTACT_FROM_EMAIL || `IFAL Consult <noreply@${SITE.domain}>`;
+  const to = (process.env.CONTACT_TO_EMAIL || SITE.email).trim();
+  const from = (process.env.CONTACT_FROM_EMAIL || `IFAL Consult <noreply@${SITE.domain}>`).trim();
 
   const rows: [string, string][] = [
     ["Name", name],

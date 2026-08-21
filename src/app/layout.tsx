@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { GoogleTagManager } from "@next/third-parties/google";
+import { Analytics } from "@vercel/analytics/next";
 import { barlow, plexSans, plexMono } from "@/lib/fonts";
 import { SITE } from "@/lib/site";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -78,6 +79,7 @@ export default function RootLayout({
         <main id="main">{children}</main>
         <SiteFooter />
         <OrganizationSchema />
+        <Analytics />
         {SITE.gtmId ? <GoogleTagManager gtmId={SITE.gtmId} /> : null}
       </body>
     </html>
