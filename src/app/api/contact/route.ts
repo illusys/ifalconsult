@@ -13,9 +13,21 @@ function escapeHtml(s: string) {
     .replace(/"/g, "&quot;");
 }
 
-// Trim env values: a trailing space or newline pasted into the dashboard is a
-// very common cause of auth/validation failures.
-const RESEND_KEY = process.env.RESEND_API_KEY?.trim();
+// Clean env values: a trailing space/newline, or a value pasted WITH the
+// surrounding quotes, is a very common cause of auth/validation failures.
+function cleanEnv(v: string | undefined): string | undefined {
+  if (v == null) return v;
+  let s = v.trim();
+  if (
+    s.length >= 2 &&
+    ((s.startsWith('"') && s.endsWith('"')) || (s.startsWith("'") && s.endsWith("'")))
+  ) {
+    s = s.slice(1, -1).trim();
+  }
+  return s;
+}
+
+const RESEND_KEY = cleanEnv(process.env.RESEND_API_KEY);
 
 async function sendViaResend(payload: {
   to: string;
@@ -55,8 +67,8 @@ function domainOf(addr: string) {
 // deployment actually has the env vars and that `from` is on your verified
 // domain. Never returns the API key itself.
 export async function GET() {
-  const to = (process.env.CONTACT_TO_EMAIL || SITE.email).trim();
-  const from = (process.env.CONTACT_FROM_EMAIL || `IFAL Consult <noreply@${SITE.domain}>`).trim();
+  const to = cleanEnv(process.env.CONTACT_TO_EMAIL) || SITE.email;
+  const from = cleanEnv(process.env.CONTACT_FROM_EMAIL) || `IFAL Consult <noreply@${SITE.domain}>`;
   const fromDomain = domainOf(from);
   return NextResponse.json({
     ok: true,
@@ -108,8 +120,8 @@ export async function POST(request: Request) {
     );
   }
 
-  const to = (process.env.CONTACT_TO_EMAIL || SITE.email).trim();
-  const from = (process.env.CONTACT_FROM_EMAIL || `IFAL Consult <noreply@${SITE.domain}>`).trim();
+  const to = cleanEnv(process.env.CONTACT_TO_EMAIL) || SITE.email;
+  const from = cleanEnv(process.env.CONTACT_FROM_EMAIL) || `IFAL Consult <noreply@${SITE.domain}>`;
 
   const rows: [string, string][] = [
     ["Name", name],
