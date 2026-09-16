@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import { Button } from "@/components/ui/Button";
+import Link from "next/link";
 import { Icon } from "@/components/Icon";
 import "./hero-showcase.css";
 
@@ -18,26 +18,47 @@ type Service = {
   cardNote: string;
 };
 
-// Copy grounded in current pain points for Nigerian businesses
-// (weak records → no credit; ~$236bn MSME funding gap, ~20% loan access;
-// 2025 Nigeria Tax Act / NRS e-invoicing; weak internal controls; low
-// financial literacy). The value proposition leads; the service follows;
-// each call to action is specific to the service on screen.
+// Order and headings requested by the client: the big header names the
+// service on each slide. Copy is grounded in current pain points for Nigerian
+// businesses (weak records → no credit; ~$236bn MSME funding gap, ~20% loan
+// access; 2025 tax reform / NRS e-invoicing; weak internal controls).
 const SERVICES: Service[] = [
   {
     id: "software",
-    name: "Accounting software",
+    name: "Accounting Software",
     pain: "Books scattered across spreadsheets, paper, and apps that don't talk.",
-    headline: "One system. One source of truth.",
-    line: "We select, set up, and tailor your accounting software — e-invoicing ready — so every figure is current and every report is a click away.",
+    headline: "Centralized Processing System.",
+    line: "Cloud-based, real-time accounting software — selected, set up, and tailored to your business, so every figure is current and every report is a click away.",
     cta: "Set up my accounting system",
     cardLabel: "Set-up outcome",
     cardValue: "Real-time books",
     cardNote: "NRS e-invoicing ready for 2026.",
   },
   {
+    id: "training",
+    name: "Training",
+    pain: "The business stalls whenever the owner isn't in the room.",
+    headline: "A team that runs the numbers.",
+    line: "Practical, hands-on finance and systems training, built around the job expectations, tools, and reports your team uses every day.",
+    cta: "Upskill my team",
+    cardLabel: "Capability",
+    cardValue: "Your team",
+    cardNote: "Confident with the numbers, not just us.",
+  },
+  {
+    id: "tax",
+    name: "Tax Management",
+    pain: "Shifting rules and missed deadlines that turn into penalties.",
+    headline: "Every filing on time. Zero penalties.",
+    line: "Registration, filings, and planning across VAT, PAYE, and company income tax — and the reliefs you're entitled to under the 2025 reforms.",
+    cta: "Fix my tax compliance",
+    cardLabel: "Penalties",
+    cardValue: "₦0",
+    cardNote: "Filed on time; only what you owe.",
+  },
+  {
     id: "advisory",
-    name: "Business advisory",
+    name: "Business Advisory",
     pain: "Growth, funding, and restructuring calls made on gut feel.",
     headline: "Decisions backed by numbers.",
     line: "Financial models, budgets, and forecasts that hold up under scrutiny — and that banks and investors actually trust.",
@@ -47,41 +68,19 @@ const SERVICES: Service[] = [
     cardNote: "Bankable numbers open the door.",
   },
   {
-    id: "training",
-    name: "Training",
-    pain: "The business stalls whenever the owner isn't in the room.",
-    headline: "A team that runs the numbers.",
-    line: "Practical, hands-on finance and systems training, built around the tools and reports your team uses every day.",
-    cta: "Upskill my team",
-    cardLabel: "Capability",
-    cardValue: "Your team",
-    cardNote: "Confident with the numbers, not just us.",
-  },
-  {
     id: "audit",
     name: "Audit",
     pain: "Weak controls, and money leaking out unnoticed until it's too late.",
     headline: "Findings you can act on.",
-    line: "Statutory and internal audits that surface what's leaking, strengthen your controls, and produce accounts banks and tenders accept.",
+    line: "Statutory, internal, and specialist audits that surface what's leaking, strengthen your controls, and produce accounts banks and tenders accept.",
     cta: "Book an audit",
     cardLabel: "SME loan access",
     cardValue: "20.2%",
     cardNote: "Audited accounts help you qualify.",
   },
-  {
-    id: "tax",
-    name: "Tax management",
-    pain: "Shifting rules and missed deadlines that turn into penalties.",
-    headline: "Every filing on time. Zero penalties.",
-    line: "Registration, filings, and planning across VAT, PAYE, and company income tax — and the reliefs you're entitled to under the 2025 reforms.",
-    cta: "Fix my tax compliance",
-    cardLabel: "Penalties",
-    cardValue: "₦0",
-    cardNote: "Filed on time; only what you owe.",
-  },
 ];
 
-const DURATION = 6800;
+const DURATION = 7000;
 
 export function HeroShowcase() {
   const [index, setIndex] = useState(0);
@@ -100,8 +99,7 @@ export function HeroShowcase() {
     return () => mq.removeEventListener("change", set);
   }, []);
 
-  // Hold the SVG animation and rotation until just after first paint so they
-  // never compete with the hero's LCP/hydration on load (mobile especially).
+  // Hold the SVG animation and rotation until just after first paint.
   useEffect(() => {
     const w = window as Window & {
       requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
@@ -110,16 +108,11 @@ export function HeroShowcase() {
     const start = () => {
       t = setTimeout(() => setReady(true), 400);
     };
-    if (w.requestIdleCallback) {
-      w.requestIdleCallback(start, { timeout: 1200 });
-    } else {
-      start();
-    }
+    if (w.requestIdleCallback) w.requestIdleCallback(start, { timeout: 1200 });
+    else start();
     return () => clearTimeout(t);
   }, []);
 
-  // Only rotate while the hero is on screen (it starts on screen, but this
-  // pauses rotation once scrolled past, saving work).
   useEffect(() => {
     const el = rootRef.current;
     if (!el) return;
@@ -159,16 +152,14 @@ export function HeroShowcase() {
       }}
     >
       <div className="container hero-rot__grid">
-        {/* LEFT — the story leads here, left-to-right */}
+        {/* LEFT — the story leads here; the header names the service. */}
         <div className="hero-rot__left">
           <span className="eyebrow">Interactive Financial Advisors Limited</span>
-          <h1 className="hero-rot__h1">Critical thinking, innovative solutions.</h1>
 
-          {/* Rotating value proposition — announced to assistive tech. */}
           <div className="showcase__copy hero-rot__story" aria-live="polite">
-            <span className="showcase__kicker" key={`k-${active.id}`}>
+            <h1 className="hero-rot__h1" key={`n-${active.id}`}>
               {active.name}
-            </span>
+            </h1>
             <p className="showcase__pain" key={`p-${active.id}`}>
               <span className="showcase__pain-dot" aria-hidden="true" />
               {active.pain}
@@ -194,7 +185,6 @@ export function HeroShowcase() {
             </div>
           </div>
 
-          {/* Progress tabs across the five services */}
           <div className="hero-rot__controls">
             <div className="showcase__dots" role="tablist" aria-label="IFAL services">
               {SERVICES.map((s, i) => (
@@ -234,7 +224,6 @@ export function HeroShowcase() {
             </button>
           </div>
 
-          {/* Persistent credibility */}
           <div className="hero__stats">
             {[
               { v: "8+", l: "Years advising" },
@@ -251,7 +240,7 @@ export function HeroShowcase() {
           </div>
         </div>
 
-        {/* RIGHT — the animation, changing in sync with the story */}
+        {/* RIGHT — a realistic, colourful app screen for each service. */}
         <div className="hero-rot__right">
           <div className="showcase__stage" aria-hidden="true">
             <Scene key={active.id} id={active.id} />
@@ -277,260 +266,278 @@ export function HeroShowcase() {
   );
 }
 
-/* ------------------------------------------------------------------ */
-/* Scenes — pure SVG, animated via CSS classes in hero-showcase.css.  */
-/* ------------------------------------------------------------------ */
+/* ================================================================== */
+/* Scenes — realistic, colourful mini-app screens. Pure SVG + CSS.    */
+/* ================================================================== */
+
+const VB = "0 0 340 210";
+const SANS = "var(--font-sans)";
+const MONO = "var(--font-mono)";
+const s = { fontFamily: SANS as string };
+
+// Palette (literal hex — SVG presentation attrs don't resolve CSS vars).
+const NAVY = "#202070";
+const NAVY6 = "#292a80";
+const NAVY5 = "#33368f";
+const NAVY4 = "#5255b3";
+const NAVY3 = "#7d80cb";
+const NAVY50 = "#ecedf7";
+const INK = "#202070";
+const GRAY7 = "#383c4d";
+const GRAY5 = "#6b7186";
+const GRAY2 = "#dfe2ec";
+const GRAY1 = "#eef0f6";
+const GRAY05 = "#f6f7fb";
+const GREEN = "#1a7f4b";
+const GREEN4 = "#27a567";
+const GREEN50 = "#e6f4ec";
+const GOLD = "#e0a82e";
+const GOLD50 = "#fbf1dc";
+const TEAL = "#0ea5a5";
+const TEAL50 = "#e2f6f5";
+const RED = "#e00016";
+const RED50 = "#fde8ea";
+const WHITE = "#fff";
+const BORDER = "#e6e8f2";
+
+function Win({ title }: { title: string }) {
+  return (
+    <g>
+      <rect x="14" y="12" width="312" height="186" rx="14" fill={WHITE} stroke={BORDER} />
+      <circle cx="32" cy="30" r="3.5" fill={RED} />
+      <circle cx="45" cy="30" r="3.5" fill={GOLD} />
+      <circle cx="58" cy="30" r="3.5" fill={GREEN} />
+      <text x="74" y="34" fontSize="10" fontWeight="600" fill={GRAY5}>
+        {title}
+      </text>
+      <line x1="14" y1="44" x2="326" y2="44" stroke={GRAY1} />
+    </g>
+  );
+}
 
 function Scene({ id }: { id: string }) {
   switch (id) {
     case "software":
       return <SoftwareScene />;
-    case "advisory":
-      return <AdvisoryScene />;
     case "training":
       return <TrainingScene />;
-    case "audit":
-      return <AuditScene />;
     case "tax":
       return <TaxScene />;
+    case "advisory":
+      return <AdvisoryScene />;
+    case "audit":
+      return <AuditScene />;
     default:
       return null;
   }
 }
 
-const VB = "0 0 340 210";
-// Literal hex (SVG presentation attributes don't resolve CSS var()).
-const NAVY_100 = "#d4d5ee";
-const NAVY_200 = "#a9abdd";
-const NAVY_700 = "#202070";
-const RED_400 = "#ea3141";
-const RED_500 = "#e00016";
-const GREEN = "#1a7f4b";
-const SANS = "var(--font-sans)";
-const MONO = "var(--font-mono)";
-const svgStyle = { fontFamily: SANS as string };
-
-/* Scene 1 — scattered records gather into one clean ledger. */
+/* Accounting Software — a live finance dashboard. */
 function SoftwareScene() {
-  return (
-    <svg viewBox={VB} preserveAspectRatio="xMidYMid meet" role="img" style={svgStyle}>
-      <g className="sc1-a">
-        <rect x="34" y="70" width="42" height="54" rx="4" fill={NAVY_200} opacity="0.5" />
-      </g>
-      <g className="sc1-b">
-        <rect x="40" y="86" width="42" height="54" rx="4" fill={NAVY_100} opacity="0.4" />
-      </g>
-      <g className="sc1-c">
-        <rect x="46" y="60" width="42" height="54" rx="4" fill={NAVY_200} opacity="0.6" />
-      </g>
-
-      <rect x="150" y="44" width="150" height="122" rx="10" fill="#26267e" />
-      <rect x="150" y="44" width="150" height="26" rx="10" fill="#2f2f92" />
-      <circle cx="166" cy="57" r="4" fill={RED_500} />
-      <rect x="178" y="54" width="60" height="6" rx="3" fill={NAVY_100} opacity="0.7" />
-
-      <rect className="sc1-row sc1-row-1" x="166" y="84" width="118" height="9" rx="3" fill="#3a3aa0" />
-      <rect className="sc1-row sc1-row-2" x="166" y="102" width="118" height="9" rx="3" fill="#3a3aa0" />
-      <rect className="sc1-row sc1-row-3" x="166" y="120" width="118" height="9" rx="3" fill="#3a3aa0" />
-
-      <g className="sc1-tick">
-        <circle cx="284" cy="150" r="15" fill={GREEN} />
-        <path d="M277 150 l5 5 l9 -10" fill="none" stroke="#fff" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
-      </g>
-      <text x="166" y="153" style={{ fontFamily: MONO }} fontSize="12" fill="#fff" opacity="0.9">
-        ₦ synced
-      </text>
-    </svg>
-  );
-}
-
-/* Scene 2 — history + rising forecast, projection cone, investor-ready stamp. */
-function AdvisoryScene() {
-  return (
-    <svg viewBox={VB} preserveAspectRatio="xMidYMid meet" role="img" style={svgStyle}>
-      <line x1="40" y1="30" x2="40" y2="170" stroke="#5255b3" strokeWidth="1.5" opacity="0.6" />
-      <line x1="40" y1="170" x2="308" y2="170" stroke="#5255b3" strokeWidth="1.5" opacity="0.6" />
-
-      <g fill="#3a3aa0">
-        <rect className="sc2-bar sc2-bar-1" x="60" y="128" width="16" height="42" rx="2" />
-        <rect className="sc2-bar sc2-bar-2" x="92" y="112" width="16" height="58" rx="2" />
-        <rect className="sc2-bar sc2-bar-3" x="124" y="120" width="16" height="50" rx="2" />
-        <rect className="sc2-bar sc2-bar-4" x="156" y="96" width="16" height="74" rx="2" />
-      </g>
-
-      <polygon className="sc2-cone" points="180,92 300,44 300,96 180,92" fill={RED_400} />
-
-      <polyline
-        className="sc2-hist"
-        points="52,140 84,124 116,130 172,104"
-        fill="none"
-        stroke={NAVY_100}
-        strokeWidth="3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <polyline
-        className="sc2-fore"
-        points="172,104 216,86 260,64 300,46"
-        fill="none"
-        stroke={RED_500}
-        strokeWidth="3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <circle cx="300" cy="46" r="4.5" fill={RED_500} />
-
-      <g className="sc2-stamp">
-        <rect x="192" y="120" width="122" height="30" rx="15" fill="#fff" />
-        <circle cx="210" cy="135" r="8" fill={GREEN} />
-        <path d="M206 135 l3 3 l6 -6" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-        <text x="224" y="139" fontSize="11" fontWeight="600" fill={NAVY_700}>
-          Investor-ready
-        </text>
-      </g>
-    </svg>
-  );
-}
-
-/* Scene 3 — team skill meters fill, a report completes. */
-function TrainingScene() {
-  const people = [
-    { x: 44, node: "sc3-node-1", fill: "sc3-fill-1" },
-    { x: 120, node: "sc3-node-2", fill: "sc3-fill-2" },
-    { x: 196, node: "sc3-node-3", fill: "sc3-fill-3" },
+  const kpis = [
+    { x: 26, bg: NAVY50, label: "Revenue", val: "₦4.8m", up: true, c: GREEN },
+    { x: 124, bg: GOLD50, label: "Expenses", val: "₦3.1m", up: false, c: GOLD },
+    { x: 222, bg: GREEN50, label: "Cash", val: "₦1.7m", up: true, c: GREEN4 },
+  ];
+  const bars = [
+    { h: 26, c: NAVY4 }, { h: 40, c: GREEN4 }, { h: 32, c: TEAL },
+    { h: 52, c: NAVY4 }, { h: 44, c: GREEN4 }, { h: 60, c: TEAL },
+    { h: 48, c: GREEN },
   ];
   return (
-    <svg viewBox={VB} preserveAspectRatio="xMidYMid meet" role="img" style={svgStyle}>
-      {people.map((p, i) => (
-        <g key={i}>
-          <g className={`sc3-node ${p.node}`} style={{ transformOrigin: `${p.x + 24}px 66px` }}>
-            <circle cx={p.x + 24} cy="66" r="15" fill="#3a3aa0" />
-            <circle cx={p.x + 24} cy="61" r="6" fill="#fff" opacity="0.9" />
-            <path d={`M${p.x + 12} 78 a12 10 0 0 1 24 0 z`} fill="#fff" opacity="0.9" />
-          </g>
-          <rect x={p.x} y="100" width="48" height="8" rx="4" fill="#2f2f92" />
-          <rect
-            className={`sc3-fill ${p.fill}`}
-            x={p.x}
-            y="100"
-            width="48"
-            height="8"
-            rx="4"
-            fill={GREEN}
-            style={{ transformBox: "fill-box" }}
+    <svg viewBox={VB} preserveAspectRatio="xMidYMid meet" role="img" style={s}>
+      <Win title="Ledger · Overview" />
+      {/* synced pill */}
+      <g className="a-pop" style={{ animationDelay: "1.4s" }}>
+        <rect x="250" y="23" width="62" height="14" rx="7" fill={GREEN50} />
+        <circle cx="261" cy="30" r="3" fill={GREEN} />
+        <text x="269" y="33.5" fontSize="8.5" fontWeight="600" fill={GREEN}>Synced</text>
+      </g>
+      {/* KPI cards */}
+      {kpis.map((k, i) => (
+        <g key={k.label} className="a-in" style={{ animationDelay: `${i * 0.12}s` }}>
+          <rect x={k.x} y="54" width={i === 2 ? 88 : 90} height="46" rx="8" fill={k.bg} />
+          <text x={k.x + 12} y="72" fontSize="8.5" fill={GRAY5}>{k.label}</text>
+          <text x={k.x + 12} y="91" fontSize="15" fontWeight="700" fill={INK} style={{ fontFamily: MONO }}>{k.val}</text>
+          <path
+            d={k.up ? `M${k.x + 60} 90 l6 -7 l5 4 l8 -9` : `M${k.x + 60} 82 l6 7 l5 -4 l8 9`}
+            fill="none" stroke={k.c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
           />
         </g>
       ))}
-
-      <rect x="256" y="52" width="60" height="76" rx="8" fill="#26267e" />
-      <rect x="268" y="66" width="36" height="6" rx="3" fill="#3a3aa0" />
-      <rect x="268" y="80" width="36" height="6" rx="3" fill="#3a3aa0" />
-      <rect x="268" y="94" width="24" height="6" rx="3" fill="#3a3aa0" />
-      <path
-        className="sc3-check"
-        d="M270 112 l6 6 l12 -14"
-        fill="none"
-        stroke={GREEN}
-        strokeWidth="3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <text x="44" y="140" fontSize="11" fontWeight="600" fill={NAVY_100}>
-        Skills building across the team
-      </text>
-    </svg>
-  );
-}
-
-/* Scene 4 — audit scan sweeps rows, flags an anomaly, then seals. */
-function AuditScene() {
-  const rows = [58, 82, 106, 130];
-  return (
-    <svg viewBox={VB} preserveAspectRatio="xMidYMid meet" role="img" style={svgStyle}>
-      <rect x="34" y="40" width="210" height="132" rx="10" fill="#26267e" />
-      {rows.map((y, i) => (
-        <g key={i}>
-          <rect x="50" y={y} width="120" height="8" rx="4" fill="#3a3aa0" />
-          <rect x="184" y={y} width="44" height="8" rx="4" fill="#33338f" />
-        </g>
-      ))}
-
-      <rect className="sc4-scan" x="34" y="40" width="210" height="14" rx="4" fill={NAVY_100} opacity="0.18" />
-
-      <g className="sc4-flag">
-        <rect x="46" y="102" width="186" height="16" rx="5" fill="none" stroke={RED_500} strokeWidth="2" />
-        <circle cx="238" cy="110" r="8" fill={RED_500} />
-        <rect x="237.2" y="105" width="1.6" height="6" rx="0.8" fill="#fff" />
-        <circle cx="238" cy="114" r="1" fill="#fff" />
+      {/* legend */}
+      <g style={{ fontFamily: SANS }}>
+        <circle cx="30" cy="116" r="3" fill={GREEN4} /><text x="37" y="119" fontSize="8" fill={GRAY5}>Income</text>
+        <circle cx="78" cy="116" r="3" fill={NAVY4} /><text x="85" y="119" fontSize="8" fill={GRAY5}>Outflow</text>
       </g>
-      <g className="sc4-resolve">
-        <circle cx="238" cy="110" r="8" fill={GREEN} />
-        <path d="M234 110 l3 3 l6 -6" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      </g>
-
-      <g className="sc4-seal" style={{ transformOrigin: "286px 150px" }}>
-        <circle cx="286" cy="150" r="26" fill="#fff" />
-        <path
-          d="M286 130 l16 6 v13 c0 12 -10 18 -16 21 c-6 -3 -16 -9 -16 -21 v-13 z"
-          fill={NAVY_700}
+      {/* bar chart */}
+      {bars.map((b, i) => (
+        <rect
+          key={i}
+          className="a-grow"
+          style={{ animationDelay: `${0.3 + i * 0.08}s` }}
+          x={30 + i * 40}
+          y={188 - b.h}
+          width="24"
+          height={b.h}
+          rx="3"
+          fill={b.c}
         />
-        <path d="M279 150 l5 5 l9 -11" fill="none" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
-      </g>
+      ))}
+      <line x1="26" y1="188" x2="314" y2="188" stroke={GRAY2} />
     </svg>
   );
 }
 
-/* Scene 5 — filings ticked on time; deadline ring completes; zero penalties. */
-function TaxScene() {
+/* Training — team skills climbing. */
+function TrainingScene() {
   const rows = [
-    { label: "VAT", y: 46, cls: "sc5-tick-1" },
-    { label: "PAYE", y: 86, cls: "sc5-tick-2" },
-    { label: "CIT", y: 126, cls: "sc5-tick-3" },
+    { y: 56, avatar: NAVY5, pct: 92, w: 138 },
+    { y: 100, avatar: TEAL, pct: 78, w: 117 },
+    { y: 144, avatar: GOLD, pct: 64, w: 96 },
   ];
   return (
-    <svg viewBox={VB} preserveAspectRatio="xMidYMid meet" role="img" style={svgStyle}>
+    <svg viewBox={VB} preserveAspectRatio="xMidYMid meet" role="img" style={s}>
+      <Win title="Team training" />
+      {rows.map((r, i) => (
+        <g key={i}>
+          <g className="a-in" style={{ animationDelay: `${i * 0.12}s` }}>
+            <circle cx="40" cy={r.y + 16} r="14" fill={r.avatar} />
+            <circle cx="40" cy={r.y + 11} r="5.5" fill={WHITE} opacity="0.95" />
+            <path d={`M28 ${r.y + 28} a12 9 0 0 1 24 0 z`} fill={WHITE} opacity="0.95" />
+          </g>
+          <rect x="64" y={r.y + 4} width="86" height="9" rx="4.5" fill={GRAY1} />
+          <rect x="64" y={r.y + 20} width="188" height="9" rx="4.5" fill={GRAY1} />
+          <rect
+            className="a-growx"
+            style={{ animationDelay: `${0.35 + i * 0.22}s` }}
+            x="64" y={r.y + 20} width={r.w} height="9" rx="4.5"
+            fill={r.pct >= 90 ? GREEN : r.pct >= 75 ? GREEN4 : GOLD}
+          />
+          <text x="262" y={r.y + 28} fontSize="11" fontWeight="700" fill={INK} style={{ fontFamily: MONO }}>{r.pct}%</text>
+        </g>
+      ))}
+      {/* certificate badge */}
+      <g className="a-pop" style={{ animationDelay: "1.5s" }}>
+        <circle cx="296" cy="60" r="15" fill={GOLD} />
+        <path d="M296 52 l2.2 4.6 l5 .7 l-3.6 3.5 .9 5 -4.5 -2.4 -4.5 2.4 .9 -5 -3.6 -3.5 5 -.7 z" fill={WHITE} />
+        <path d="M290 74 l6 4 l6 -4 v10 l-6 -3 -6 3 z" fill={GOLD} />
+      </g>
+    </svg>
+  );
+}
+
+/* Tax Management — filing tracker + deadline ring. */
+function TaxScene() {
+  const rows = [
+    { y: 54, label: "VAT", status: "Filed", tone: GREEN, bg: GREEN50, d: "0.6s" },
+    { y: 92, label: "PAYE", status: "Filed", tone: GREEN, bg: GREEN50, d: "1s" },
+    { y: 130, label: "CIT", status: "Scheduled", tone: GOLD, bg: GOLD50, d: "1.4s" },
+  ];
+  return (
+    <svg viewBox={VB} preserveAspectRatio="xMidYMid meet" role="img" style={s}>
+      <Win title="Filing status" />
       {rows.map((r) => (
         <g key={r.label}>
-          <rect x="34" y={r.y} width="190" height="30" rx="8" fill="#26267e" />
-          <text x="50" y={r.y + 20} style={{ fontFamily: MONO }} fontSize="13" fill="#fff">
-            {r.label}
-          </text>
-          <text x="104" y={r.y + 20} fontSize="11" fill={NAVY_200}>
-            filed
-          </text>
-          <g className={`sc5-tick ${r.cls}`} style={{ transformOrigin: `205px ${r.y + 15}px` }}>
-            <circle cx="205" cy={r.y + 15} r="11" fill={GREEN} />
-            <path
-              d={`M199 ${r.y + 15} l4 4 l8 -9`}
-              fill="none"
-              stroke="#fff"
-              strokeWidth="2.4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
+          <rect x="26" y={r.y} width="176" height="30" rx="8" fill={GRAY05} stroke={GRAY1} />
+          <text x="40" y={r.y + 20} fontSize="13" fontWeight="600" fill={INK} style={{ fontFamily: MONO }}>{r.label}</text>
+          <rect x="120" y={r.y + 7} width="70" height="16" rx="8" fill={r.bg} />
+          <text x="132" y={r.y + 18} fontSize="9.5" fontWeight="600" fill={r.tone}>{r.status}</text>
+          <g className="a-pop" style={{ animationDelay: r.d }}>
+            <circle cx="126" cy={r.y + 15} r="6" fill={r.tone} />
+            <path d={`M123 ${r.y + 15} l2 2 l4 -4`} fill="none" stroke={WHITE} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
           </g>
         </g>
       ))}
-
-      <g transform="translate(284,101)">
-        <circle r="30" fill="none" stroke="#2f2f92" strokeWidth="7" />
+      {/* deadline ring */}
+      <g transform="translate(272,108)">
+        <circle r="30" fill="none" stroke={GRAY1} strokeWidth="8" />
         <circle
-          className="sc5-ring"
-          r="24"
-          fill="none"
-          stroke={GREEN}
-          strokeWidth="7"
-          strokeLinecap="round"
-          transform="rotate(-90)"
+          className="a-ring"
+          style={{ ["--len" as string]: 189 } as React.CSSProperties}
+          r="30" fill="none" stroke={GREEN} strokeWidth="8" strokeLinecap="round"
+          strokeDasharray="189" transform="rotate(-90)"
         />
-        <text x="0" y="5" textAnchor="middle" style={{ fontFamily: MONO }} fontSize="14" fontWeight="600" fill="#fff">
-          ₦0
-        </text>
+        <text x="0" y="1" textAnchor="middle" fontSize="15" fontWeight="700" fill={INK} style={{ fontFamily: MONO }}>₦0</text>
+        <text x="0" y="14" textAnchor="middle" fontSize="8" fill={GRAY5}>penalties</text>
       </g>
-      <g className="sc5-seal" style={{ transformOrigin: "284px 101px" }}>
-        <text x="284" y="150" textAnchor="middle" fontSize="10" fontWeight="600" fill={NAVY_100}>
-          no penalties
-        </text>
+    </svg>
+  );
+}
+
+/* Business Advisory — growth forecast with an investor-ready badge. */
+function AdvisoryScene() {
+  const bars = [
+    { x: 40, h: 34 }, { x: 66, h: 46 }, { x: 92, h: 40 }, { x: 118, h: 56 }, { x: 144, h: 50 },
+  ];
+  return (
+    <svg viewBox={VB} preserveAspectRatio="xMidYMid meet" role="img" style={s}>
+      <Win title="Growth forecast" />
+      {/* axes */}
+      <line x1="34" y1="58" x2="34" y2="176" stroke={GRAY2} />
+      <line x1="34" y1="176" x2="312" y2="176" stroke={GRAY2} />
+      {/* history bars */}
+      {bars.map((b, i) => (
+        <rect key={i} className="a-grow" style={{ animationDelay: `${0.2 + i * 0.08}s` }}
+          x={b.x} y={176 - b.h} width="15" height={b.h} rx="2.5" fill={NAVY3} opacity="0.55" />
+      ))}
+      {/* forecast area fill */}
+      <polygon className="a-in" style={{ animationDelay: "0.9s" }}
+        points="176,96 208,80 248,60 300,44 300,176 176,176" fill={GREEN50} />
+      {/* historical line */}
+      <polyline className="a-draw" style={{ ["--len" as string]: 200 } as React.CSSProperties}
+        points="40,140 78,120 118,128 176,96" fill="none" stroke={NAVY4} strokeWidth="3"
+        strokeLinecap="round" strokeLinejoin="round" strokeDasharray="200" />
+      {/* forecast line */}
+      <polyline className="a-draw" style={{ animationDelay: "0.7s", ["--len" as string]: 200 } as React.CSSProperties}
+        points="176,96 208,80 248,60 300,44" fill="none" stroke={GREEN} strokeWidth="3"
+        strokeLinecap="round" strokeLinejoin="round" strokeDasharray="200" />
+      <circle cx="300" cy="44" r="4.5" fill={GREEN} />
+      <circle cx="176" cy="96" r="3.5" fill={GOLD} />
+      {/* investor-ready badge */}
+      <g className="a-pop" style={{ animationDelay: "1.6s" }}>
+        <rect x="186" y="136" width="120" height="28" rx="14" fill={WHITE} stroke={GREEN} strokeWidth="1.5" />
+        <circle cx="204" cy="150" r="8" fill={GREEN} />
+        <path d="M200 150 l3 3 l6 -6" fill="none" stroke={WHITE} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <text x="218" y="154" fontSize="11" fontWeight="700" fill={INK}>Be investor-ready</text>
+      </g>
+    </svg>
+  );
+}
+
+/* Audit — reviewing ledgers, flagging then clearing a finding. */
+function AuditScene() {
+  const rows = [56, 82, 108, 134];
+  return (
+    <svg viewBox={VB} preserveAspectRatio="xMidYMid meet" role="img" style={s}>
+      <Win title="Audit review" />
+      {rows.map((y, i) => (
+        <g key={i}>
+          <rect x="28" y={y} width="150" height="9" rx="4.5" fill={i === 2 ? GRAY2 : GRAY1} />
+          <rect x="190" y={y} width="46" height="9" rx="4.5" fill={GRAY1} />
+        </g>
+      ))}
+      {/* scanning highlight */}
+      <rect className="a-scan" x="26" y="52" width="212" height="18" rx="6" fill={NAVY50} opacity="0.9" />
+      {/* flagged then cleared on row 3 (y=108) */}
+      <g className="a-flag">
+        <rect x="24" y="104" width="216" height="17" rx="5" fill="none" stroke={RED} strokeWidth="1.6" />
+        <rect x="190" y={108} width="46" height="9" rx="4.5" fill={RED50} />
+        <circle cx="246" cy="112" r="7" fill={RED} />
+        <rect x="245.2" y="108" width="1.6" height="5" rx="0.8" fill={WHITE} />
+        <circle cx="246" cy="116" r="1" fill={WHITE} />
+      </g>
+      <g className="a-resolve">
+        <rect x="190" y={108} width="46" height="9" rx="4.5" fill={GREEN50} />
+        <circle cx="246" cy="112" r="7" fill={GREEN} />
+        <path d="M242 112 l3 3 l5 -5" fill="none" stroke={WHITE} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      </g>
+      {/* audited shield seal */}
+      <g className="a-pop" style={{ animationDelay: "2.4s" }}>
+        <rect x="70" y="162" width="220" height="28" rx="8" fill={NAVY} />
+        <path d="M90 168 l10 3.6 v8 c0 7.4 -6 11 -10 13 c-4 -2 -10 -5.6 -10 -13 v-8 z" fill={WHITE} />
+        <path d="M85.5 176 l3 3 l5.5 -6.5" fill="none" stroke={NAVY} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        <text x="108" y="180" fontSize="12" fontWeight="700" fill={WHITE}>Audited · controls verified</text>
       </g>
     </svg>
   );

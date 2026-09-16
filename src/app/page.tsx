@@ -34,25 +34,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Testimonial */}
-      <section className="section section--navy">
-        <div className="container">
-          <div className="testimonial">
-            <span style={{ color: "var(--ifal-red-400)", display: "inline-flex" }}>
-              <Icon name="quote" size={34} />
-            </span>
-            <p className="testimonial__quote">
-              IFAL restructured our reporting in one quarter. For the first time
-              we could see margin by product line — and we made a much better
-              call on pricing because of it.
-            </p>
-            <div className="testimonial__by">
-              <strong>Chidi Okafor</strong> · Managing Director, Lekki Foods Ltd
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* CTA band */}
       <section className="section" style={{ paddingBlock: "var(--sp-9)" }}>
         <div className="container">
